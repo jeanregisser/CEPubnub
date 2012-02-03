@@ -29,22 +29,17 @@
 
 #import <Foundation/Foundation.h>
 
-
-#import "JSON.h"
-
 #import "CEPubnubDelegate.h"
 
 @class CEPubnub;
 
 @interface CEPubnubResponse: NSObject {
     id <CEPubnubDelegate> delegate;
-    SBJsonParser* parser;
     CEPubnub* pubnub;
     NSString* channel;
 	
 }
 
-@property (nonatomic, retain) SBJsonParser *parser;
 @property (nonatomic, retain) CEPubnub *pubnub;
 @property (nonatomic, copy) NSString *channel;
 

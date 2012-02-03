@@ -124,7 +124,7 @@ didFailWithError: (NSError *) error
 
 @implementation CEPubnubResponse
 
-@synthesize parser, pubnub, channel;
+@synthesize pubnub, channel;
 
 -(CEPubnubResponse *)
 finished: (id)      callback
@@ -132,7 +132,6 @@ pubnub:   (CEPubnub*) pubnub_o
 {
     self     = [super init];
     delegate = callback;
-    parser   = [SBJsonParser new];
     [self setPubnub:pubnub_o];
     self.channel  = nil;
     return self;
@@ -146,7 +145,6 @@ channel:  (NSString*) channel_o
 {
     self     = [super init];
     delegate = callback;
-    parser   = [SBJsonParser new];
     //pubnub   = pubnub_o;
     [self setPubnub:pubnub_o];
     self.channel  = channel_o;
@@ -160,7 +158,6 @@ channel:  (NSString*) channel_o
 {
     self     = [super init];
     delegate = nil;
-    parser   = [SBJsonParser new];
     //pubnub   = pubnub_o;
     [self setPubnub:pubnub_o];
     self.channel  = channel_o;
@@ -185,9 +182,6 @@ channel:  (NSString*) channel_o
 -(void) dealloc
 {
 	
-	if (parser) {
-		[parser release];
-	}
 	if (pubnub) {
 		[pubnub release];
 		pubnub = nil;

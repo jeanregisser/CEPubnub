@@ -31,9 +31,11 @@
 
 #import <CommonCrypto/CommonDigest.h>
 
+#import "JSONKit.h"
+
 @implementation CEPubnub
 
-@synthesize publish_key, subscribe_key, secret_key, scheme, host, subscriptions, parser, writer;
+@synthesize publish_key, subscribe_key, secret_key, scheme, host, subscriptions;
 
 -(CEPubnub *)
 publishKey:   (NSString*) pub_key
@@ -50,8 +52,6 @@ origin:       (NSString*) origin
     scheme        = ssl_on ? @"https" : @"http";
     host          = origin;
     subscriptions = [[NSMutableDictionary alloc] init];
-    parser        = [SBJsonParser new];
-    writer        = [SBJsonWriter new];
 	
     return self;
 }
@@ -92,7 +92,7 @@ delegate: (id)        delegate
 	if ([message isKindOfClass:[NSString class]]) {
 		message_string = [NSString stringWithFormat:@"\"%@\"", message];
 	} else {
-		message_string = [writer stringWithObject: message];
+		message_string = [message JSONStringWithOptions:JKSerializeOptionNone error:nil];
 	}
 	
     NSString* signature = [CEPubnub md5: [NSString
@@ -272,8 +272,6 @@ delegate: (id)        delegate
 	[self shutdown];
 	
 	[subscriptions release];
-	[parser release];
-	[writer release];
 	
 	[super dealloc];
 }
@@ -285,7 +283,7 @@ delegate: (id)        delegate
 	
 	
 	
-    NSArray* response_data = [parser objectWithString: response];
+    NSArray* response_data = [response objectFromJSONStringWithParseOptions:JKParseOptionStrict error:nil];
     if (![pubnub subscribed: channel]) return;
 	
 	
@@ -361,7 +359,7 @@ delegate: (id)        delegate
 	
 	
 	
-    NSArray* response_data = [parser objectWithString: response];
+    NSArray* response_data = [response objectFromJSONStringWithParseOptions:JKParseOptionStrict error:nil];
 	
 	if (delegate) {
 		if ([delegate respondsToSelector:@selector(pubnub:subscriptionDidReceiveHistoryArray:onChannel:)]) {
@@ -423,7 +421,7 @@ delegate: (id)        delegate
 	
 	if (delegate) {
 		if ([delegate respondsToSelector:@selector(pubnub:didReceiveTime:)]) {
-			[delegate pubnub:pubnub didReceiveTime:(NSString *)[[parser objectWithString: response] objectAtIndex:0]];
+			[delegate pubnub:pubnub didReceiveTime:(NSString *)[[response objectFromJSONStringWithParseOptions:JKParseOptionStrict error:nil] objectAtIndex:0]];
 		}
 	}
 }

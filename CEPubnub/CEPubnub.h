@@ -29,7 +29,6 @@ THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
 
-#import "JSON.h"
 #import "CEPubnubRequest.h"
 #import "CEPubnubDelegate.h"
 
@@ -40,8 +39,6 @@ THE SOFTWARE.
     NSString* scheme;
     NSString* host;
     NSMutableDictionary* subscriptions;
-    SBJsonParser* parser;
-    SBJsonWriter* writer;
 }
 
 @property (nonatomic, copy) NSString *publish_key;
@@ -50,8 +47,6 @@ THE SOFTWARE.
 @property (nonatomic, copy) NSString *scheme;
 @property (nonatomic, copy) NSString *host;
 @property (nonatomic, retain) NSMutableDictionary *subscriptions;
-@property (nonatomic, retain) SBJsonParser *parser;
-@property (nonatomic, retain) SBJsonWriter *writer;
 
 -(CEPubnub*)
 	publishKey:   (NSString*) pub_key
