@@ -30,8 +30,6 @@
 #import "CEPubnubRequest.h"
 
 
-
-
 @implementation CEPubnubRequest
 
 @synthesize response, connection;
@@ -70,6 +68,8 @@ callback: (CEPubnubResponse*) callback;
 				  initWithRequest:  request
 				  delegate:         self
 				  ];
+    
+    LOG_PUBNUBCHANNEL(callback.channel, @"new connection %@", connection);
 	
     
 }
@@ -90,6 +90,7 @@ connectionDidFinishLoading: (NSURLConnection *) aConnection
 				encoding: NSUTF8StringEncoding
 				];
 	
+    LOG_PUBNUBCHANNEL([delegate channel], @"connection finished loading %@", aConnection);
     [delegate callback: response];
 	[delegate release];
 	delegate = nil;
@@ -100,7 +101,7 @@ connectionDidFinishLoading: (NSURLConnection *) aConnection
 connection:       (NSURLConnection*) connection
 didFailWithError: (NSError *) error
 {
-	
+	LOG_PUBNUBCHANNEL([delegate channel], @"connection %@ failed with error %@", connection, error);
     [delegate fail: response];
 	[delegate release];
 	delegate = nil;

@@ -281,9 +281,14 @@ delegate: (id)        delegate
 @implementation CEPubnubSubscribeDelegate
 -(void) callback: (id) response {
 	
+	LOG_PUBNUBCHANNEL(channel, @"received %@", response);
 	
-	
-    NSArray* response_data = [response objectFromJSONStringWithParseOptions:JKParseOptionStrict error:nil];
+    NSError* error = nil;
+    NSArray* response_data = [response objectFromJSONStringWithParseOptions:JKParseOptionStrict error:&error];
+    if (error) {
+        LOG_PUBNUBCHANNEL(channel, @"error parsing response: %@", error);
+    }
+    
     if (![pubnub subscribed: channel]) return;
 	
 	
@@ -310,22 +315,28 @@ delegate: (id)        delegate
 			
 			
 			if ([message isKindOfClass:[NSDictionary class]]) {
+                LOG_PUBNUBCHANNEL(channel, @"delivering dict %@", message);
 				if ([delegate respondsToSelector:@selector(pubnub:subscriptionDidReceiveDictionary:onChannel:)]) {
 					[delegate pubnub:pubnub subscriptionDidReceiveDictionary:message onChannel:channel];
 				}
 			} else if ([message isKindOfClass:[NSArray class]]) {
+                LOG_PUBNUBCHANNEL(channel, @"delivering array %@", message);
 				if ([delegate respondsToSelector:@selector(pubnub:subscriptionDidReceiveArray:onChannel:)]) {
 					[delegate pubnub:pubnub subscriptionDidReceiveArray:message onChannel:channel];
 				}
 			} else if ([message isKindOfClass:[NSString class]]) {
+                LOG_PUBNUBCHANNEL(channel, @"delivering string %@", message);
 				if ([delegate respondsToSelector:@selector(pubnub:subscriptionDidReceiveString:onChannel:)]) {
 					[delegate pubnub:pubnub subscriptionDidReceiveString:message onChannel:channel];
 				}
 			}
+            else {
+                LOG_PUBNUB(channel, @"unknown message %@", message);
+            }
 			
 			
 		} else {
-			
+			LOG_PUBNUB(channel, @"not delivering, no delegate");
 		}
     }
 	
@@ -344,6 +355,8 @@ delegate: (id)        delegate
 				  nil]
 	 afterDelay: 1.0
 	 ];
+    
+    LOG_PUBNUBCHANNEL(channel, @"subscription failed %@", response);
 	
 	if (delegate) {
 		if ([delegate respondsToSelector:@selector(pubnub:subscriptionDidFailWithResponse:onChannel:)]) {
