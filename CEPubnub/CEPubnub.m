@@ -179,7 +179,7 @@ delegate:  (id)        delegate
 		
 	
     if ([self subscribed: channel]) {
-        NSLog( @"Already Subscribed: %@", channel );
+        LOG_PUBNUB_WARNING( @"Already Subscribed: %@", channel );
         return;
     }
 	
