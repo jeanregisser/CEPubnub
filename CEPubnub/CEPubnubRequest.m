@@ -32,7 +32,7 @@
 
 @implementation CEPubnubRequest
 
-@synthesize response, connection;
+@synthesize delegate, response, connection;
 
 -(void)
 scheme:   (NSString*) scheme
@@ -125,7 +125,7 @@ didFailWithError: (NSError *) error
 
 @implementation CEPubnubResponse
 
-@synthesize pubnub, channel;
+@synthesize delegate, pubnub, channel;
 
 -(CEPubnubResponse *)
 finished: (id)      callback

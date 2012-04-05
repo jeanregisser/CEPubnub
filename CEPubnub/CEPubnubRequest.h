@@ -50,6 +50,7 @@
 	
 }
 
+@property (nonatomic, readonly) id<CEPubnubDelegate> delegate;
 @property (nonatomic, retain) CEPubnub *pubnub;
 @property (nonatomic, copy) NSString *channel;
 
@@ -87,6 +88,7 @@ channel: (NSString*) channel_o;
 	NSMutableData *receivedData;
 }
 
+@property (nonatomic, readonly) id delegate;
 @property (nonatomic, copy) NSString *response;
 @property (nonatomic, retain) NSURLConnection *connection;
 
