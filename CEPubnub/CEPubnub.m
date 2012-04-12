@@ -149,11 +149,13 @@ delegate: (id)        delegate
 -(void) subscribe: (NSDictionary*) args {
     NSString* channel = [args objectForKey:@"channel"];
 	
-	// Not subscribed anymore or subscription changed to a new delegate?
-	// "response" is set if this method call was delayed from the CEPubnubSubscribeDelegate fail: method
-	CEPubnubResponse* response = [args objectForKey:@"response"];
-	if (response && ![self subscribed:channel withResponse:response]) {
-		return;
+	{
+		// Not subscribed anymore or subscription changed to a new delegate?
+		// "request" is set if this method call was delayed from the CEPubnubSubscribeDelegate fail: method
+		CEPubnubRequest* request = [args objectForKey:@"request"];
+		if (request && request != [subscriptions objectForKey:channel]) {
+			return;
+		}
 	}
     
 	CEPubnubResponse *callback = [CEPubnubSubscribeDelegate alloc];
@@ -373,7 +375,7 @@ delegate: (id)        delegate
 				  channel,  @"channel", 
 				  delegate, @"delegate", 
 				  @"1",     @"timetoken",
-				  self,     @"response",
+				  [pubnub.subscriptions objectForKey:channel],     @"request",
 				  nil]
 	 afterDelay: 1.0
 	 ];
