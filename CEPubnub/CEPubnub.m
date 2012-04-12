@@ -133,6 +133,18 @@ delegate: (id)        delegate
     if ([subscriptions objectForKey: channel]) return YES;
     return NO;
 }
+
+- (BOOL)subscribed:(NSString*)channel withResponse:(CEPubnubResponse*)response {
+    CEPubnubRequest* req = [subscriptions objectForKey:channel];
+	CEPubnubResponse* resp = (CEPubnubResponse*)req.delegate;
+	
+	if (!req || resp != response) { 
+		return NO;
+	}
+	
+	return YES;
+}
+
 // * /subscribe/sub-key/channel/callback/timetoken
 -(void) subscribe: (NSDictionary*) args {
     NSString* channel = [args objectForKey:@"channel"];
@@ -289,7 +301,8 @@ delegate: (id)        delegate
         LOG_PUBNUBCHANNEL(channel, @"error parsing response: %@", error);
     }
     
-    if (![pubnub subscribed: channel]) return;
+    // Not subscribed anymore or subscription changed to a new delegate?
+	if (![pubnub subscribed:channel withResponse:self]) return;
 	
 	
 	
@@ -343,7 +356,8 @@ delegate: (id)        delegate
 }
 
 -(void) fail: (id) response {
-    if (![pubnub subscribed: channel]) return;
+	// Not subscribed anymore or subscription changed to a new delegate?
+	if (![pubnub subscribed:channel withResponse:self]) return;
 	
     [pubnub
 	 performSelector: @selector(subscribe:)
