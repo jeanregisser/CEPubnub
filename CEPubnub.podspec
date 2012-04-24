@@ -8,6 +8,6 @@ Pod::Spec.new do |s|
   s.source   = { :git => 'git://github.com/jeanregisser/CEPubnub.git' }
   s.platform = :ios  
   s.source_files = 'CEPubnub/*.{h,m}'
-  s.clean_paths = FileList['*'].exclude(/(CEPubnub|README.md|LICENCE)$/)
+  s.clean_paths = FileList['*'].exclude(/(CEPubnub|README.md|LICENSE)$/)
   s.dependency 'JSONKit'
 end
