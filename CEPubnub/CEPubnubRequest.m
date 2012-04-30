@@ -98,10 +98,10 @@ connectionDidFinishLoading: (NSURLConnection *) aConnection
 }
 
 -(void)
-connection:       (NSURLConnection*) connection
+connection:       (NSURLConnection*) aConnection
 didFailWithError: (NSError *) error
 {
-	LOG_PUBNUBCHANNEL([delegate channel], @"connection %@ failed with error %@", connection, error);
+	LOG_PUBNUBCHANNEL([delegate channel], @"connection %@ failed with error %@", aConnection, error);
     [delegate fail: response];
 	[delegate release];
 	delegate = nil;

@@ -32,6 +32,8 @@
 #import "CEPubnubDelegate.h"
 
 #ifdef NSLOGGER_PUBNUB
+#import "LoggerClient.h"
+#import "lcl.h"
 #define LOG_PUBNUB(...) LogMessageF(__FILE__,__LINE__,__FUNCTION__,@"PubNub",lcl_vDebug,__VA_ARGS__)
 #define LOG_PUBNUB_WARNING(...) LogMessageF(__FILE__,__LINE__,__FUNCTION__,@"PubNub",lcl_vWarning,__VA_ARGS__)
 #define LOG_PUBNUBCHANNEL(channel, ...) LogMessageF(__FILE__,__LINE__,__FUNCTION__,[NSString stringWithFormat:@"PubNub-%@", channel],lcl_vDebug,__VA_ARGS__)
